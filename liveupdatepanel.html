@@ -309,22 +309,29 @@
                 let bengkel = findValue("TempatBengkel", ["tempatbengkel", "bengkel", "tempat"]);
                 let nama = findValue("Nama", ["nama", "panel"], ["waris"]);
                 let subjek = findValue("Mata Pelajaran", ["matapelajaran", "mata", "subjek", "pelajaran"]);
-                let masa = findValue("Masa", ["masa", "waktu"]);
-                let hari = findValue("Hari", ["hari", "tarikh", "date"]);
-                let status = findValue("Status", ["status", "kehadiran", "hadir"]);
-                let warisNama = findValue("WarisNama", ["warisnama", "namawaris", "waris"], ["tel", "telefon", "no"]);
-                let warisTel = findValue("WarisTel", ["waristel", "telwaris", "telefon", "notel", "phone"]);
+                
+                // --- KEMASKINI LOGIK STATUS, HARI & MASA ---
+                // Oleh kerana data wujud di dalam sheet (sudah hantar borang), status secara automatik "Disahkan"
+                let status = "Disahkan";
+                
+                // Ambil masa & hari secara automatik daripada Timestamp (waktu user submit borang)
                 let timestamp = findValue("Timestamp", ["timestamp", "waktu"]);
-
-                if (timestamp && (!hari || !masa)) {
-                    let parts = timestamp.split(' ');
+                let hari = "-";
+                let masa = "-";
+                
+                if (timestamp) {
+                    // Pisahkan Timestamp kepada Tarikh (Hari) dan Waktu (Masa)
+                    let parts = timestamp.split(' '); 
                     if(parts.length >= 2) {
-                        if(!hari) hari = parts[0];
-                        if(!masa) masa = parts.slice(1).join(' ');
+                        hari = parts[0];
+                        masa = parts.slice(1).join(' ');
                     } else {
-                        if(!hari) hari = timestamp;
+                        hari = timestamp;
                     }
                 }
+                
+                let warisNama = findValue("WarisNama", ["warisnama", "namawaris", "waris"], ["tel", "telefon", "no"]);
+                let warisTel = findValue("WarisTel", ["waristel", "telwaris", "telefon", "notel", "phone"]);
 
                 // Asalkan TempatBengkel ADA ISI, data akan dimasukkan ke dashboard
                 if (bengkel !== "") {
@@ -466,10 +473,10 @@
             relevantData.forEach((item, index) => {
                 // Cantikkan label status
                 let statusBadge = item.status;
-                if(item.status.toLowerCase().includes('hadir')) {
-                    statusBadge = `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">${item.status}</span>`;
+                if(item.status.toLowerCase().includes('hadir') || item.status.toLowerCase().includes('sah')) {
+                    statusBadge = `<span class="inline-flex items-center rounded-md bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700 ring-1 ring-inset ring-green-600/20 shadow-sm"><i class="fas fa-check-circle mr-1.5 text-green-500"></i> ${item.status}</span>`;
                 } else if(item.status.toLowerCase().includes('tidak')) {
-                    statusBadge = `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">${item.status}</span>`;
+                    statusBadge = `<span class="inline-flex items-center rounded-md bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-600/10 shadow-sm"><i class="fas fa-times-circle mr-1.5 text-red-500"></i> ${item.status}</span>`;
                 }
 
                 // Link Telefon Waris
