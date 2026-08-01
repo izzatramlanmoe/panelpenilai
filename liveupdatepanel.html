@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Update Panel</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PapaParse for robust CSV processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Latar Belakang Abstrak Bulatan */
+        .bg-shape {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .shape-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #ff9a9e; border-radius: 50%; }
+        .shape-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: #fecfef; border-radius: 50%; }
+        .shape-3 { top: 40%; left: 30%; width: 300px; height: 300px; background: #a18cd1; border-radius: 50%; }
+
+        /* Glassmorphism Utama */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        /* Kad interaktif */
+        .glass-interactive {
+            transition: all 0.3s ease;
+        }
+        .glass-interactive:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 15px 45px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        /* Animasi Kemunculan Berperingkat (Staggered Fade-in-up) */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Jadual */
+        .glass-table th {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        .glass-table tr:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Scrollbar tersuai untuk Modal */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased p-4 md:p-8">
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-5xl mx-auto flex flex-col items-center">
+        
+        <!-- HEADER SECTION -->
+        <div class="w-full glass-card rounded-3xl p-6 md:p-8 mb-8 text-center relative overflow-hidden">
+            
+            <!-- Live Indicator & Refresh -->
+            <div class="inline-flex items-center justify-center space-x-3 bg-white/60 backdrop-blur-sm border border-white/80 py-2 px-5 rounded-full shadow-sm mb-6">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span class="font-medium text-sm md:text-base text-gray-700">Live Update:</span>
+                <span id="lastUpdated" class="font-semibold text-sm md:text-base text-gray-900">Memuatkan...</span>
+                <button onclick="fetchData()" class="ml-2 text-gray-500 hover:text-blue-600 transition-colors focus:outline-none" title="Segar Semula Sekarang">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-blue-700 mb-2">
+                Dashboard Maklumat Panel
+            </h1>
+            <p class="text-gray-600 mb-8 font-medium">Pemantauan data pendaftaran secara masa nyata</p>
+
+            <!-- Jumlah Keseluruhan -->
+            <div class="inline-block bg-gradient-to-br from-white/70 to-white/40 border border-white/60 shadow-lg rounded-2xl px-10 py-6 mb-8 transform transition hover:scale-105">
+                <p class="text-sm uppercase tracking-wider text-gray-500 font-semibold mb-1">Jumlah Panel (Bengkel Terpilih)</p>
+                <p id="totalCountDisplay" class="text-5xl md:text-6xl font-black text-indigo-700">0</p>
+            </div>
+
+            <!-- Dropdown Pemilihan Bengkel -->
+            <div class="max-w-md mx-auto w-full">
+                <label for="bengkelSelect" class="block text-sm font-bold text-gray-700 mb-2 text-left px-2">Pilih Tempat Bengkel:</label>
+                <div class="relative">
+                    <select id="bengkelSelect" onchange="handleBengkelChange()" class="block w-full pl-4 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl bg-white/70 backdrop-blur-md shadow-sm border border-white appearance-none cursor-pointer font-medium text-gray-800 transition-all hover:bg-white/90">
+                        <option value="">Semua Bengkel</option>
+                        <!-- Options akan dimasukkan melalui JS -->
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADER -->
+        <div id="loader" class="my-12 text-center text-indigo-600 hidden">
+            <i class="fas fa-circle-notch fa-spin fa-3x"></i>
+            <p class="mt-4 font-medium">Menarik data dari pelayan...</p>
+        </div>
+
+        <!-- SUBJECTS GRID CONTAINER -->
+        <div id="subjectsGrid" class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Kad akan dipaparkan di sini -->
+        </div>
+
+    </div>
+
+    <!-- MODAL DETAILS -->
+    <div id="detailsModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Latar belakang gelap (Backdrop) -->
+        <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+
+        <!-- Kandungan Modal -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-3xl glass-card text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-4xl opacity-100 scale-100">
+                    
+                    <!-- Header Modal -->
+                    <div class="bg-white/40 border-b border-white/50 px-6 py-5 flex justify-between items-center rounded-t-3xl">
+                        <div>
+                            <h3 class="text-2xl font-bold leading-6 text-gray-900" id="modalSubjectTitle">Mata Pelajaran</h3>
+                            <p class="mt-1 text-sm text-gray-600 font-medium" id="modalBengkelTitle">Bengkel</p>
+                        </div>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-red-500 hover:bg-red-100/50 rounded-full p-2 transition-colors focus:outline-none">
+                            <i class="fas fa-times fa-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Isi Modal (Jadual) -->
+                    <div class="px-6 py-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                        <div class="overflow-x-auto rounded-xl border border-white/50 shadow-sm">
+                            <table class="min-w-full divide-y divide-gray-200/50 glass-table text-sm">
+                                <thead class="text-gray-700">
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left font-semibold sm:pl-6">Bil</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left font-semibold">Nama Panel</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left font-semibold">Hari/Masa</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left font-semibold">Status</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left font-semibold">Waris</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalTableBody" class="divide-y divide-gray-200/50 bg-white/20">
+                                    <!-- Baris jadual akan dijana oleh JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Modal -->
+                    <div class="bg-white/40 border-t border-white/50 px-6 py-4 flex justify-end rounded-b-3xl">
+                        <button type="button" class="inline-flex justify-center rounded-xl border border-transparent bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors" onclick="closeModal()">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Pautan asal (tanpa parameter gid yang menyebabkan ralat 400)
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRoXQgGwwY13gb3KXxvAtnde6k0DttXER6z-VuCjoDr63y4LReEwFxWH3qTiTGXQjlqfpUa2ypHffg2/pub?output=csv";
+        
+        let allProcessedData = [];
+        let uniqueBengkels = [];
+        let currentSelectedBengkel = "";
+
+        // Fungsi memformat Tarikh Masa
+        function updateLiveTimestamp() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ms-MY', { day: '2-digit', month: 'short', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('lastUpdated').textContent = `${dateStr} - ${timeStr}`;
+        }
+
+        // Fungsi utama tarik data menggunakan Fetch API yang lebih stabil
+        async function fetchData() {
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('subjectsGrid').innerHTML = '';
+            
+            try {
+                // Tarik data menggunakan trik 'cache-buster' (tambah masa di hujung URL) agar sentiasa dapat data baharu tanpa ralat CORS/400
+                const liveUrl = CSV_URL + "&t=" + new Date().getTime();
+                const response = await fetch(liveUrl);
+                
+                if (!response.ok) {
+                    throw new Error("Gagal mengambil fail CSV. Status HTTP: " + response.status);
+                }
+                
+                const csvText = await response.text();
+                
+                // Parse teks menggunakan PapaParse
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        processData(results.data);
+                        document.getElementById('loader').classList.add('hidden');
+                        updateLiveTimestamp();
+                    },
+                    error: function(err) {
+                        console.error("Ralat penterjemahan CSV (PapaParse):", err);
+                        alert("Berlaku ralat semasa cuba menterjemah format data CSV. Sila semak pautan.");
+                        document.getElementById('loader').classList.add('hidden');
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Ralat memuat turun data secara terus:", error);
+                
+                // Fallback / Pesanan Ralat kepada pengguna
+                document.getElementById('subjectsGrid').innerHTML = `
+                    <div class="col-span-full text-center text-red-500 py-10 glass-card rounded-2xl border border-red-200">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-3 opacity-80"></i>
+                        <p class="font-bold text-lg mb-1">Sambungan Terganggu</p>
+                        <p class="text-sm">Gagal berhubung ke pangkalan data Google Sheets.</p>
+                        <button onclick="fetchData()" class="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            <i class="fas fa-sync-alt mr-2"></i> Cuba Sekali Lagi
+                        </button>
+                    </div>
+                `;
+                document.getElementById('loader').classList.add('hidden');
+            }
+        }
+
+        function processData(rawData) {
+            let processed = [];
+            let bengkelsSet = new Set();
+
+            if (!rawData || rawData.length === 0) return;
+
+            // Ini akan cetak senarai lajur ke Console (Tekan F12 di browser) untuk semakan
+            console.log("Lajur (Headers) dijumpai dari Sheet:", Object.keys(rawData[0]));
+
+            rawData.forEach(row => {
+                // Fungsi pencarian lajur TEPAT (Priority) dan PINTAR (Fallback)
+                const findValue = (exactName, keywords, avoidKeywords = []) => {
+                    // 1. Semakan Ejaan Tepat (contoh: "TempatBengkel")
+                    if (row[exactName] !== undefined && String(row[exactName]).trim() !== "") {
+                        return String(row[exactName]).trim();
+                    }
+                    
+                    // 2. Semakan Pintar: Buang semua jarak dan simbol, huruf kecilkan semua
+                    let foundKey = Object.keys(row).find(k => {
+                        let kClean = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+                        let isMatch = keywords.some(kw => kClean.includes(kw));
+                        let isAvoided = avoidKeywords.some(akw => kClean.includes(akw));
+                        return isMatch && !isAvoided;
+                    });
+                    
+                    return foundKey ? String(row[foundKey]).trim() : "";
+                };
+
+                // Membaca lajur utama berdasarkan keutamaan
+                let bengkel = findValue("TempatBengkel", ["tempatbengkel", "bengkel", "tempat"]);
+                let nama = findValue("Nama", ["nama", "panel"], ["waris"]);
+                let subjek = findValue("Mata Pelajaran", ["matapelajaran", "mata", "subjek", "pelajaran"]);
+                let masa = findValue("Masa", ["masa", "waktu"]);
+                let hari = findValue("Hari", ["hari", "tarikh", "date"]);
+                let status = findValue("Status", ["status", "kehadiran", "hadir"]);
+                let warisNama = findValue("WarisNama", ["warisnama", "namawaris", "waris"], ["tel", "telefon", "no"]);
+                let warisTel = findValue("WarisTel", ["waristel", "telwaris", "telefon", "notel", "phone"]);
+                let timestamp = findValue("Timestamp", ["timestamp", "waktu"]);
+
+                if (timestamp && (!hari || !masa)) {
+                    let parts = timestamp.split(' ');
+                    if(parts.length >= 2) {
+                        if(!hari) hari = parts[0];
+                        if(!masa) masa = parts.slice(1).join(' ');
+                    } else {
+                        if(!hari) hari = timestamp;
+                    }
+                }
+
+                // Asalkan TempatBengkel ADA ISI, data akan dimasukkan ke dashboard
+                if (bengkel !== "") {
+                    processed.push({
+                        bengkel: bengkel,
+                        nama: nama || 'Tiada Nama',
+                        subjek: subjek || 'Tiada Subjek',
+                        masa: masa || '-',
+                        hari: hari || '-',
+                        status: status || '-',
+                        warisNama: warisNama || '-',
+                        warisTel: warisTel || '-'
+                    });
+                    bengkelsSet.add(bengkel);
+                }
+            });
+
+            allProcessedData = processed;
+            
+            // Padam senarai bengkel kosong (jika ada) dan susun abjad
+            uniqueBengkels = Array.from(bengkelsSet).filter(b => b.trim() !== "").sort();
+            
+            populateBengkelDropdown();
+            renderDashboard();
+        }
+
+        function populateBengkelDropdown() {
+            const select = document.getElementById('bengkelSelect');
+            // Simpan nilai lama jika ada
+            const prevVal = select.value;
+            
+            // Reset pilihan
+            select.innerHTML = '<option value="">-- Papar Semua Bengkel --</option>';
+            
+            uniqueBengkels.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b;
+                opt.textContent = b;
+                select.appendChild(opt);
+            });
+
+            // Set balik pilihan lama jika ia masih wujud
+            if (uniqueBengkels.includes(prevVal)) {
+                select.value = prevVal;
+                currentSelectedBengkel = prevVal;
+            } else {
+                currentSelectedBengkel = "";
+            }
+        }
+
+        function handleBengkelChange() {
+            currentSelectedBengkel = document.getElementById('bengkelSelect').value;
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            const container = document.getElementById('subjectsGrid');
+            container.innerHTML = ''; // Clear lama
+
+            // Filter data ikut bengkel dipilih
+            let filteredData = allProcessedData;
+            if (currentSelectedBengkel !== "") {
+                filteredData = allProcessedData.filter(d => d.bengkel === currentSelectedBengkel);
+            }
+
+            // Kemaskini Nombor Total
+            document.getElementById('totalCountDisplay').textContent = filteredData.length;
+
+            // Kumpul ikut Mata Pelajaran
+            let groupedBySubjek = {};
+            filteredData.forEach(item => {
+                if (!groupedBySubjek[item.subjek]) {
+                    groupedBySubjek[item.subjek] = [];
+                }
+                groupedBySubjek[item.subjek].push(item);
+            });
+
+            // Jika tiada data
+            if (Object.keys(groupedBySubjek).length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10 glass-card rounded-2xl"><i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i><p>Tiada data untuk dipaparkan.</p></div>`;
+                return;
+            }
+
+            // Hasilkan Kad (Cards) dengan animasi
+            let delayCount = 0;
+            for (let subjek in groupedBySubjek) {
+                const items = groupedBySubjek[subjek];
+                const count = items.length;
+                
+                // Penggunaan delay untuk animasi Staggered
+                const animationDelay = delayCount * 0.1;
+                delayCount++;
+
+                const cardHTML = `
+                    <div class="glass-card glass-interactive rounded-2xl p-6 cursor-pointer fade-in-up flex flex-col justify-between h-full" 
+                         style="animation-delay: ${animationDelay}s;"
+                         onclick="openModal('${subjek.replace(/'/g, "\\'")}')">
+                        
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="bg-indigo-100 text-indigo-700 p-3 rounded-xl">
+                                <i class="fas fa-book-open fa-lg"></i>
+                            </div>
+                            <span class="bg-white/60 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                ${currentSelectedBengkel || 'Semua'}
+                            </span>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 leading-tight">${subjek}</h3>
+                            <div class="flex items-end justify-between mt-4">
+                                <p class="text-sm text-gray-500 font-medium">Jumlah Pengisi</p>
+                                <p class="text-3xl font-black text-indigo-600">${count}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            }
+        }
+
+        function openModal(subjekName) {
+            const modal = document.getElementById('detailsModal');
+            const titleEl = document.getElementById('modalSubjectTitle');
+            const bengkelEl = document.getElementById('modalBengkelTitle');
+            const tbody = document.getElementById('modalTableBody');
+            
+            titleEl.textContent = subjekName;
+            bengkelEl.textContent = currentSelectedBengkel ? `Bengkel: ${currentSelectedBengkel}` : "Semua Bengkel";
+            
+            tbody.innerHTML = ''; // clear
+            
+            // Dapatkan data spesifik
+            let relevantData = allProcessedData.filter(d => d.subjek === subjekName);
+            if(currentSelectedBengkel) {
+                relevantData = relevantData.filter(d => d.bengkel === currentSelectedBengkel);
+            }
+
+            // Masukkan ke dalam jadual
+            relevantData.forEach((item, index) => {
+                // Cantikkan label status
+                let statusBadge = item.status;
+                if(item.status.toLowerCase().includes('hadir')) {
+                    statusBadge = `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">${item.status}</span>`;
+                } else if(item.status.toLowerCase().includes('tidak')) {
+                    statusBadge = `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">${item.status}</span>`;
+                }
+
+                // Link Telefon Waris
+                let warisContact = item.warisTel !== '-' 
+                    ? `<a href="tel:${item.warisTel.replace(/[^0-9+]/g, '')}" class="text-indigo-600 hover:text-indigo-900 flex items-center gap-1"><i class="fas fa-phone-alt text-xs"></i> ${item.warisTel}</a>`
+                    : '-';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">${index + 1}</td>
+                    <td class="px-3 py-4 text-sm font-bold text-gray-800">
+                        ${item.nama}
+                        ${!currentSelectedBengkel ? `<br><span class="text-xs text-gray-500 font-normal"><i class="fas fa-map-marker-alt"></i> ${item.bengkel}</span>` : ''}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
+                        <div class="font-medium">${item.hari}</div>
+                        <div class="text-xs text-gray-500">${item.masa}</div>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">${statusBadge}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
+                        <div class="font-medium">${item.warisNama}</div>
+                        <div>${warisContact}</div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Tunjuk Modal
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        // Initialize bila file diload
+        window.onload = function() {
+            fetchData();
+            // Auto refresh setiap 5 minit (300000 ms)
+            setInterval(fetchData, 300000); 
+        };
+    </script>
+</body>
+</html>
