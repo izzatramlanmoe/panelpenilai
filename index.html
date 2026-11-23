@@ -92,6 +92,196 @@
         
         /* Required Star */
         .req-star { color: #ef4444; margin-left: 0.25rem; font-weight: bold; }
+
+        /* Firefly Login Theme Styles */
+        .firefly-wrapper {
+            background: radial-gradient(circle at 50% 0%, #241b15 0%, #141210 48%, #0d0c0b 100%);
+            border: 1px solid rgba(255, 198, 107, 0.18);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 224, 163, 0.12);
+            color: #e2e8f0;
+        }
+        .lamp-cone {
+            background: linear-gradient(180deg, rgba(255, 210, 125, 0.24) 0%, rgba(255, 185, 80, 0.08) 45%, rgba(255, 185, 80, 0) 100%);
+            clip-path: polygon(44% 0%, 56% 0%, 100% 100%, 0% 100%);
+            pointer-events: none;
+        }
+        .lamp-bulb {
+            background: radial-gradient(circle, #fffbeb 0%, #fcd34d 45%, #f59e0b 85%, transparent 100%);
+            box-shadow: 0 0 25px 8px rgba(251, 191, 36, 0.55), 0 0 60px 20px rgba(245, 158, 11, 0.25);
+        }
+        .firefly-input {
+            background: rgba(24, 22, 20, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0.85rem !important;
+            color: #f8fafc !important;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+            transition: all 0.3s ease;
+        }
+        .firefly-input::placeholder {
+            color: #64748b;
+        }
+        .firefly-input:focus {
+            border-color: rgba(251, 191, 36, 0.65) !important;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15), inset 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+            outline: none;
+        }
+        .firefly-input.is-filled {
+            border-color: rgba(245, 158, 11, 0.55) !important;
+            background-color: rgba(34, 28, 20, 0.9) !important;
+            color: #fef3c7 !important;
+        }
+        .firefly-btn {
+            background: rgba(38, 35, 32, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .firefly-btn:hover, .firefly-btn-lit {
+            background: linear-gradient(135deg, #f3c669 0%, #d99b38 100%) !important;
+            border-color: #fde68a !important;
+            color: #1c1407 !important;
+            box-shadow: 0 0 28px rgba(245, 158, 11, 0.45), 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+        }
+        .firefly-tab-active {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(217, 119, 6, 0.22));
+            color: #fcd34d;
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+        }
+        .firefly-tab-inactive {
+            color: #78716c;
+        }
+        .firefly-tab-inactive:hover {
+            color: #d6d3d1;
+        }
+        /* Firefly Spark Entity */
+        #fireflySpark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            z-index: 30;
+            will-change: transform;
+        }
+        .firefly-core {
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            background: radial-gradient(circle, #ffffff 10%, #fde047 50%, #f59e0b 90%, transparent 100%);
+            box-shadow: 0 0 12px 4px rgba(253, 224, 71, 0.9), 0 0 28px 10px rgba(245, 158, 11, 0.65);
+            animation: fireflyPulse 1.6s ease-in-out infinite alternate;
+        }
+        .firefly-wing-left, .firefly-wing-right {
+            position: absolute;
+            top: -3px;
+            width: 8px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 50%;
+            filter: blur(0.4px);
+        }
+        .firefly-wing-left {
+            left: -4px;
+            transform-origin: right center;
+            animation: flapLeft 0.12s ease-in-out infinite alternate;
+        }
+        .firefly-wing-right {
+            right: -4px;
+            transform-origin: left center;
+            animation: flapRight 0.12s ease-in-out infinite alternate;
+        }
+        @keyframes fireflyPulse {
+            0% { transform: scale(0.85); opacity: 0.8; }
+            100% { transform: scale(1.18); opacity: 1; }
+        }
+        @keyframes flapLeft {
+            0% { transform: rotate(-25deg) scaleY(0.7); }
+            100% { transform: rotate(20deg) scaleY(1.1); }
+        }
+        @keyframes flapRight {
+            0% { transform: rotate(25deg) scaleY(0.7); }
+            100% { transform: rotate(-20deg) scaleY(1.1); }
+        }
+
+        /* GLOBAL DARK MODE OVERRIDES */
+        body {
+            background: #0d0c0b;
+            background-image: radial-gradient(circle at 50% 0%, #1c1917 0%, #0d0c0b 100%);
+            color: #e2e8f0;
+        }
+        /* Override Blob Colors for Dark Mode */
+        .mix-blend-multiply { mix-blend-mode: screen !important; opacity: 0.15 !important; }
+        .bg-purple-300 { background-color: #f59e0b !important; }
+        .bg-blue-300 { background-color: #fcd34d !important; }
+        .bg-pink-300 { background-color: #fb923c !important; }
+
+        /* Main Form Panels */
+        .glass-panel {
+            background: rgba(28, 25, 23, 0.75);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+        .glass-inner {
+            background: rgba(12, 10, 9, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 2px 15px rgba(0,0,0,0.5);
+        }
+        .glass-input, .readonly-input {
+            background: rgba(12, 10, 9, 0.8) !important;
+            border: 1px solid rgba(120, 113, 108, 0.3) !important;
+            color: #f5f5f4 !important;
+        }
+        .glass-input:focus {
+            border-color: rgba(245, 158, 11, 0.6) !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15) !important;
+        }
+        .is-filled {
+            border-color: rgba(217, 119, 6, 0.6) !important;
+            background-color: rgba(28, 25, 23, 0.9) !important;
+            color: #fde68a !important;
+        }
+        
+        /* Typography Overrides */
+        h2, h3, h4, label, .text-gray-800, .text-indigo-900 { color: #f5f5f4 !important; }
+        .text-gray-700, .text-gray-600, p { color: #a8a29e !important; }
+        .text-indigo-600, .text-blue-600, .text-orange-600 { color: #fbbf24 !important; }
+        .text-indigo-800, .text-blue-900, .text-orange-900 { color: #fef3c7 !important; }
+        .text-gray-500 { color: #78716c !important; }
+        
+        /* Container Backgrounds Overrides */
+        .bg-white\/40, .bg-white\/50, .bg-white\/60, .bg-white\/70, .bg-gray-50\/50, .bg-indigo-50\/50, .bg-indigo-100 {
+            background-color: rgba(28, 25, 23, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+        }
+        .bg-gradient-to-br.from-orange-50\/50, .bg-gradient-to-br.from-blue-50\/50 { background: rgba(12, 10, 9, 0.6) !important; }
+        
+        /* Borders */
+        .border-l-orange-500, .border-l-blue-500, .border-l-indigo-400 { border-color: #d97706 !important; }
+        .border-t-indigo-100, .border-indigo-100, .border-indigo-200\/50 { border-color: rgba(255, 255, 255, 0.08) !important; }
+        
+        /* Select & Checkbox */
+        option { background: #1c1917; color: #f5f5f4; }
+        input[type="checkbox"] { background-color: #1c1917; border-color: #57534e; }
+        input[type="checkbox"]:checked { background-color: #d97706; border-color: #d97706; }
+        
+        /* Buttons */
+        .bg-gradient-to-r.from-blue-600.to-indigo-700 {
+            background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important;
+            color: #1c1917 !important;
+            box-shadow: 0 10px 25px rgba(217, 119, 6, 0.3) !important;
+        }
+        .bg-gradient-to-r.from-blue-600.to-indigo-700:hover { box-shadow: 0 15px 30px rgba(217, 119, 6, 0.5) !important; }
+        .bg-indigo-600 { background-color: #d97706 !important; color: #fff !important; }
+        .bg-emerald-600 { background-color: #10b981 !important; color: #fff !important; }
+        
+        /* Headers Title Dropdown Override */
+        .bg-gradient-to-r.from-indigo-900.to-purple-800 {
+            background: linear-gradient(to right, #fde68a, #d97706) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
     </style>
 </head>
 <body class="antialiased relative">
@@ -160,73 +350,113 @@
 
     <!-- Top Navigation -->
     <div class="p-4 md:p-6 sticky top-0 z-40">
-        <nav class="max-w-6xl mx-auto glass-panel px-6 py-4 flex justify-between items-center shadow-sm">
-            <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-br from-indigo-600 to-purple-600 p-2.5 rounded-xl shadow-md">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        <nav class="max-w-6xl mx-auto firefly-wrapper px-6 py-4 flex items-center justify-center relative shadow-[0_10px_30px_rgba(0,0,0,0.5)] rounded-[1.75rem] border border-amber-500/20">
+            <div class="flex items-center justify-center space-x-3 md:space-x-4">
+                <div class="bg-gradient-to-br from-amber-400 to-amber-600 p-2.5 rounded-xl shadow-[0_0_15px_rgba(245,158,11,0.5)] relative flex-shrink-0">
+                    <div class="absolute inset-0 bg-amber-400 blur opacity-50 rounded-xl"></div>
+                    <svg class="w-6 h-6 text-stone-900 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 </div>
-                <h1 class="font-extrabold text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 to-purple-800 tracking-tight leading-tight">SISTEM DATA PANEL PENILAI BUKU TEKS<br class="hidden md:block">KEMENTERIAN PENDIDIKAN</h1>
+                <h1 class="font-extrabold text-lg md:text-2xl text-center text-transparent bg-clip-text bg-gradient-to-r from-amber-100 to-amber-500 tracking-tight leading-tight drop-shadow-md">SISTEM DATA PANEL PENILAI BUKU TEKS<br class="hidden md:block">KEMENTERIAN PENDIDIKAN</h1>
             </div>
-            <button id="btnLogout" class="hidden bg-red-500/90 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md transition-all" onclick="logout()">Log Keluar</button>
+            <button id="btnLogout" class="hidden absolute right-6 bg-stone-800 hover:bg-stone-700 text-amber-400 px-5 py-2.5 rounded-xl text-sm font-bold shadow-[0_0_10px_rgba(245,158,11,0.2)] transition-all border border-amber-500/30" onclick="logout()">Log Keluar</button>
         </nav>
     </div>
 
     <div class="max-w-5xl mx-auto px-4 md:px-6 pb-12">
         
-        <!-- Auth Section -->
-        <div id="authSection" class="max-w-md mx-auto glass-panel overflow-hidden relative shadow-2xl border border-white/80 mt-10">
-            <div class="text-center pt-10 pb-6 px-6">
-                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-tr from-blue-100 to-indigo-100 mb-5 shadow-inner border-2 border-white">
-                    <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                </div>
-                <h2 class="text-3xl font-extrabold text-indigo-900">Selamat Datang</h2>
-                <p class="text-sm text-gray-600 font-semibold mt-2">Sila log masuk atau daftar untuk meneruskan</p>
+        <!-- Auth Section (Tema Firefly Login) -->
+        <div id="authSection" class="max-w-md mx-auto firefly-wrapper rounded-[2rem] overflow-hidden relative mt-6 pb-10">
+            
+            <!-- Kelip-kelip Interaktif (Firefly Spark) -->
+            <div id="fireflySpark" aria-hidden="true">
+                <div class="firefly-wing-left"></div>
+                <div class="firefly-wing-right"></div>
+                <div class="firefly-core"></div>
             </div>
 
-            <!-- Tab Switcher -->
-            <div class="flex p-1.5 bg-indigo-900/5 rounded-full mx-8 mb-6 border border-indigo-900/10 shadow-inner">
-                <button id="tabLogin" class="w-1/2 py-3 text-center font-extrabold text-sm transition-all tab-active">LOG MASUK</button>
-                <button id="tabRegister" class="w-1/2 py-3 text-center font-extrabold text-sm transition-all tab-inactive">DAFTAR BAHARU</button>
+            <!-- Lampu Gantung & Pancaran Cahaya -->
+            <div class="relative flex flex-col items-center pt-0 pb-6 select-none">
+                <!-- Wayar Lampu -->
+                <div class="w-[2px] h-14 bg-gradient-to-b from-stone-800 to-stone-500"></div>
+                <!-- Tudung Lampu -->
+                <div class="w-12 h-4 bg-gradient-to-b from-stone-600 to-stone-800 rounded-t-full border-t border-stone-400/30 shadow-md z-10"></div>
+                <!-- Mentol Bercahaya -->
+                <div id="lampAnchor" class="w-5 h-3 rounded-b-full lamp-bulb -mt-0.5 z-10"></div>
+                <!-- Kon Cahaya -->
+                <div class="w-80 h-56 lamp-cone -mt-2 absolute top-16"></div>
+                
+                <h2 id="authHeaderTitle" class="text-2xl font-bold text-stone-200 tracking-tight mt-7 z-10">Log Masuk</h2>
+                <p class="text-xs text-stone-400 font-medium mt-1 z-10">Sistem Data Panel Penilai Buku Teks KPM</p>
+            </div>
+
+            <!-- Tab Switcher (Log Masuk / Daftar Baharu) -->
+            <div class="flex p-1 bg-black/50 rounded-full mx-8 mb-6 border border-white/10 relative z-10">
+                <button id="tabLogin" type="button" class="w-1/2 py-2.5 text-center font-bold text-xs tracking-wider rounded-full transition-all firefly-tab-active">LOG MASUK</button>
+                <button id="tabRegister" type="button" class="w-1/2 py-2.5 text-center font-bold text-xs tracking-wider rounded-full transition-all firefly-tab-inactive">DAFTAR BAHARU</button>
             </div>
             
-            <div class="px-8 pb-10">
+            <div class="px-8 relative z-10">
                 <!-- Log Masuk Form -->
                 <div id="loginFormContainer">
-                    <div class="space-y-5">
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 ml-1 mb-1">No. Kad Pengenalan</label>
-                            <input type="text" id="loginIC" placeholder="Cth: 800101-12-3456" class="w-full p-4 glass-input font-bold text-center tracking-wider text-lg" oninput="formatIC(this)">
+                            <label class="block text-xs font-semibold text-stone-400 ml-1 mb-1.5">No. Kad Pengenalan</label>
+                            <input type="text" id="loginIC" placeholder="800101-12-3456" class="w-full px-4 py-3.5 firefly-input font-semibold tracking-wider text-base" oninput="formatIC(this)">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 ml-1 mb-1">Kata Laluan</label>
-                            <input type="password" id="loginPassword" placeholder="••••••••" class="w-full p-4 glass-input font-medium tracking-widest text-center text-lg">
+                            <label class="block text-xs font-semibold text-stone-400 ml-1 mb-1.5">Kata Laluan</label>
+                            <div class="relative">
+                                <input type="password" id="loginPassword" placeholder="Kata Laluan" class="w-full pl-4 pr-12 py-3.5 firefly-input font-medium tracking-wider text-base">
+                                <button type="button" id="toggleLoginEye" onclick="togglePassVisibility('loginPassword', 'eyeIconLogin')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-amber-300 transition-colors p-1" title="Lihat / Sembunyi Kata Laluan">
+                                    <svg id="eyeIconLogin" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex justify-end pt-1">
-                            <a href="#" onclick="openForgotModal()" class="text-sm font-extrabold text-indigo-600 hover:text-indigo-800 transition-colors">Lupa Kata Laluan?</a>
+                        <div class="flex justify-end pt-0.5">
+                            <a href="#" onclick="openForgotModal(); return false;" class="text-xs font-semibold text-amber-400/90 hover:text-amber-300 transition-colors">Lupa Kata Laluan?</a>
                         </div>
-                        <button onclick="processLogin()" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl shadow-[0_8px_20px_rgba(79,70,229,0.3)] font-extrabold text-lg flex items-center justify-center group hover:scale-[1.02] transition-all">
-                            <span id="loginText">LOG MASUK</span><div id="loginLoader" class="loader hidden ml-3"></div>
+                        <button type="button" id="btnLoginSubmit" onclick="processLogin()" class="w-full mt-3 py-3.5 rounded-xl firefly-btn font-bold text-base flex items-center justify-center cursor-pointer">
+                            <span id="loginText">Log Masuk</span><div id="loginLoader" class="loader hidden ml-3"></div>
                         </button>
                     </div>
                 </div>
 
                 <!-- Daftar Baharu Form -->
                 <div id="registerFormContainer" class="hidden">
-                    <div class="space-y-5">
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 ml-1 mb-1">No. Kad Pengenalan (Sempang Diletakkan Automatik)</label>
-                            <input type="text" id="regICInit" placeholder="Cth: 800101-12-3456" class="w-full p-4 glass-input font-bold text-center tracking-wider text-lg" oninput="formatIC(this)">
+                            <label class="block text-xs font-semibold text-stone-400 ml-1 mb-1.5">No. Kad Pengenalan (Sempang Automatik)</label>
+                            <input type="text" id="regICInit" placeholder="800101-12-3456" class="w-full px-4 py-3.5 firefly-input font-semibold tracking-wider text-base" oninput="formatIC(this)">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 ml-1 mb-1">Cipta Kata Laluan</label>
-                            <input type="password" id="regPasswordInit" placeholder="Cipta Kata Laluan" class="w-full p-4 glass-input font-medium text-center text-lg">
+                            <label class="block text-xs font-semibold text-stone-400 ml-1 mb-1.5">Cipta Kata Laluan</label>
+                            <div class="relative">
+                                <input type="password" id="regPasswordInit" placeholder="Cipta Kata Laluan" class="w-full pl-4 pr-12 py-3.5 firefly-input font-medium text-base">
+                                <button type="button" onclick="togglePassVisibility('regPasswordInit', 'eyeIconReg1')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-amber-300 transition-colors p-1">
+                                    <svg id="eyeIconReg1" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 ml-1 mb-1">Sahkan Kata Laluan</label>
-                            <input type="password" id="regPasswordConfirm" placeholder="Sahkan Kata Laluan" class="w-full p-4 glass-input font-medium text-center text-lg">
+                            <label class="block text-xs font-semibold text-stone-400 ml-1 mb-1.5">Sahkan Kata Laluan</label>
+                            <div class="relative">
+                                <input type="password" id="regPasswordConfirm" placeholder="Sahkan Kata Laluan" class="w-full pl-4 pr-12 py-3.5 firefly-input font-medium text-base">
+                                <button type="button" onclick="togglePassVisibility('regPasswordConfirm', 'eyeIconReg2')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-amber-300 transition-colors p-1">
+                                    <svg id="eyeIconReg2" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <button id="btnSeterusnyaReg" class="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 rounded-2xl shadow-[0_8px_20px_rgba(16,185,129,0.3)] font-extrabold text-lg flex items-center justify-center hover:scale-[1.02] transition-all">
-                            <span id="regText">SETERUSNYA</span><div id="regLoader" class="loader hidden ml-3"></div>
+                        <button type="button" id="btnSeterusnyaReg" class="w-full mt-3 py-3.5 rounded-xl firefly-btn font-bold text-base flex items-center justify-center cursor-pointer">
+                            <span id="regText">Seterusnya</span><div id="regLoader" class="loader hidden ml-3"></div>
                         </button>
                     </div>
                 </div>
@@ -422,13 +652,50 @@
                             </select>
                         </div>
 
+                        <!-- Gambar Terkini: Upload Fail atau Kamera Live -->
                         <div class="md:col-span-2 mt-4 bg-white/40 p-6 rounded-2xl border border-white/80 shadow-inner">
-                            <label class="block text-sm font-extrabold mb-2 text-indigo-900">Gambar Terkini (Upload)</label>
-                            <p class="text-xs text-gray-700 font-bold mb-4">Sila muat naik GAMBAR BERUKURAN PASSPORT (PARAS BAHU) terkini anda. Pastikan dalam format PNG atau JPEG SAHAJA. Saiz TIDAK MELEBIHI 250KB.</p>
-                            <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                            <label class="block text-sm font-extrabold mb-2 text-indigo-900">Gambar Terkini (Upload / Kamera Live)</label>
+                            <p class="text-xs text-gray-700 font-bold mb-4">Sila muat naik GAMBAR BERUKURAN PASSPORT (PARAS BAHU) terkini anda atau tangkap gambar secara langsung. Pastikan dalam format PNG atau JPEG SAHAJA. Saiz TIDAK MELEBIHI 250KB.</p>
+                            
+                            <!-- Tab Pilihan Mod Gambar -->
+                            <div class="inline-flex p-1 bg-white/70 rounded-xl mb-5 border border-indigo-100 shadow-sm">
+                                <button type="button" id="btnModeUpload" onclick="setPicMode('upload')" class="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md transition-all">Muat Naik Fail</button>
+                                <button type="button" id="btnModeCamera" onclick="setPicMode('camera')" class="px-4 py-2.5 bg-transparent text-gray-600 hover:text-indigo-600 rounded-lg text-sm font-bold transition-all">Kamera Live</button>
+                            </div>
+
+                            <!-- UI Mod Muat Naik Fail -->
+                            <div id="uploadUI" class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
                                 <input type="file" id="gambarUpload" accept="image/png, image/jpeg" class="w-full md:w-auto text-sm text-gray-700 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-extrabold file:bg-gradient-to-r file:from-blue-600 file:to-indigo-600 file:text-white cursor-pointer hover:file:shadow-lg hover:file:scale-[1.02] transition-all">
+                            </div>
+
+                            <!-- UI Mod Kamera Live -->
+                            <div id="cameraUI" class="hidden space-y-4">
+                                <div class="relative w-full max-w-sm bg-slate-900 rounded-2xl overflow-hidden shadow-lg border-2 border-white">
+                                    <video id="liveVideo" autoplay playsinline class="hidden w-full h-auto object-cover transform -scale-x-100"></video>
+                                    <canvas id="liveCanvas" class="hidden"></canvas>
+                                </div>
+                                <div class="flex flex-wrap gap-3">
+                                    <button type="button" id="btnStartCam" onclick="startCamera()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-extrabold shadow-md transition-all flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                        Buka Kamera
+                                    </button>
+                                    <button type="button" id="btnCaptureCam" onclick="capturePhoto()" class="hidden px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-extrabold shadow-md transition-all flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        Tangkap & Muat Naik Gambar
+                                    </button>
+                                    <button type="button" id="btnStopCam" onclick="stopCamera()" class="hidden px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-extrabold shadow-md transition-all">
+                                        Tutup Kamera
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Pratonton & Status Gambar -->
+                            <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 mt-5">
                                 <input type="hidden" id="GambarBase64" name="GambarBase64">
-                                <img id="gambarPreview" class="hidden rounded-xl shadow-xl object-cover border-4 border-white" style="width: 120px; height: 150px;" alt="Preview">
+                                <div class="flex flex-col items-start space-y-2">
+                                    <img id="gambarPreview" class="hidden rounded-xl shadow-xl object-cover border-4 border-white" style="width: 120px; height: 150px;" alt="Preview">
+                                    <span id="gambarInfo" class="hidden text-xs font-extrabold text-indigo-800 bg-indigo-100 px-3 py-1 rounded-full"></span>
+                                </div>
                                 <div id="gambarLinkContainer" class="hidden flex flex-col justify-center">
                                     <span class="text-xs font-extrabold text-emerald-800 bg-emerald-200/80 px-4 py-1.5 rounded-full w-max mb-2 border border-emerald-300">✓ Gambar Tersimpan Di Drive</span>
                                     <a id="gambarExistingLink" href="#" target="_blank" class="text-sm font-bold text-blue-700 hover:text-blue-900 hover:underline flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Lihat Gambar</a>
@@ -569,28 +836,6 @@
                             <label class="block text-sm font-bold mb-2 ml-1 text-gray-800">BANDAR <span class="req-star">*</span></label>
                             <input type="text" name="Bandar" class="w-full p-3.5 glass-input uppercase-input font-bold" oninput="this.value = this.value.toUpperCase()" required>
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-bold mb-2 ml-1 text-gray-800">NEGERI <span class="req-star">*</span></label>
-                            <select name="Negeri" class="w-full p-3.5 glass-input font-medium" required>
-                                <option value="">-- Pilih Negeri --</option>
-                                <option value="JOHOR">JOHOR</option>
-                                <option value="KEDAH">KEDAH</option>
-                                <option value="KELANTAN">KELANTAN</option>
-                                <option value="MELAKA">MELAKA</option>
-                                <option value="NEGERI SEMBILAN">NEGERI SEMBILAN</option>
-                                <option value="PAHANG">PAHANG</option>
-                                <option value="PERAK">PERAK</option>
-                                <option value="PERLIS">PERLIS</option>
-                                <option value="PULAU PINANG">PULAU PINANG</option>
-                                <option value="SABAH">SABAH</option>
-                                <option value="SARAWAK">SARAWAK</option>
-                                <option value="SELANGOR">SELANGOR</option>
-                                <option value="TERENGGANU">TERENGGANU</option>
-                                <option value="W.P. KUALA LUMPUR">W.P. KUALA LUMPUR</option>
-                                <option value="W.P. LABUAN">W.P. LABUAN</option>
-                                <option value="W.P. PUTRAJAYA">W.P. PUTRAJAYA</option>
-                            </select>
-                        </div>
                     </div>
                 </section>
 
@@ -689,7 +934,7 @@
 
                         <div class="bg-white/50 p-5 rounded-2xl border border-white/80 shadow-sm">
                             <label class="block text-sm font-bold mb-1 ml-1 text-gray-800">MATA PELAJARAN 2 <span class="req-star">*</span></label>
-                            <p class="text-xs font-semibold text-transparent mb-2 ml-1">-</p> <!-- spacing spacer -->
+                            <p class="text-xs font-semibold text-transparent mb-2 ml-1">-</p>
                             <input type="text" name="AjarSubjek2" class="w-full p-3.5 glass-input uppercase-input mb-4 font-bold" oninput="this.value = this.value.toUpperCase()" required>
                             
                             <label class="block text-sm font-bold mb-1 ml-1 text-gray-800">TEMPOH MENGAJAR MATA PELAJARAN 2 (TAHUN) <span class="req-star">*</span></label>
@@ -1043,7 +1288,6 @@
                 div.classList.remove('hidden');
             } else {
                 div.classList.add('hidden');
-                // Clear input when hidden so it doesn't submit unwanted data
                 const inp = div.querySelector('input');
                 if(inp) { inp.value = ''; checkFilled(inp); }
             }
@@ -1073,12 +1317,102 @@
             else { element.classList.remove('is-filled'); }
         }
 
+        function togglePassVisibility(inputId, iconId) {
+            const inp = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!inp) return;
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                if (icon) {
+                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>`;
+                }
+            } else {
+                inp.type = 'password';
+                if (icon) {
+                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>`;
+                }
+            }
+            if (window.moveFireflyTo) window.moveFireflyTo(inp);
+        }
+
+        /* Firefly Physics & Landing Animation */
+        function initFireflyAnimation() {
+            const container = document.getElementById('authSection');
+            const spark = document.getElementById('fireflySpark');
+            const lamp = document.getElementById('lampAnchor');
+            if (!container || !spark || !lamp) return;
+
+            const STIFF = 0.04;
+            const DAMP = 0.76;
+            let x = 200, y = 75, vx = 0, vy = 0;
+            let goal = { x: 200, y: 75 };
+            let hoverOffset = 0;
+
+            function setGoalToElement(el, isInput = false) {
+                if (!el || container.classList.contains('hidden')) return;
+                const cRect = container.getBoundingClientRect();
+                const eRect = el.getBoundingClientRect();
+                if (eRect.width === 0 && eRect.height === 0) return;
+
+                if (isInput && el.type !== 'password' && el.type !== 'checkbox') {
+                    // Kira kedudukan mendatar kelip-kelip supaya ikut kursor teks
+                    const charWidth = window.innerWidth < 768 ? 7 : 8.5; // Anggaran saiz piksel bagi satu huruf
+                    let textLen = el.value ? el.value.length : 0;
+                    let targetX = (eRect.left - cRect.left) + 24 + (textLen * charWidth);
+                    const maxX = (eRect.right - cRect.left) - 30; // Had ruang maksimum ke kanan
+                    
+                    goal.x = Math.min(targetX, maxX);
+                    goal.y = (eRect.top - cRect.top) - 12; // Terapung di bahagian atas input (Tidak lindung teks)
+                } else if (isInput && el.type === 'password') {
+                    // Untuk kata laluan pergi berhampiran dengan ikon mata
+                    goal.x = (eRect.right - cRect.left) - 40;
+                    goal.y = (eRect.top - cRect.top) - 12; // Terapung di bahagian atas kotak
+                } else {
+                    // Jika klik pada butang, duduk ditengah
+                    goal.x = (eRect.left - cRect.left) + (eRect.width / 2) - 6;
+                    goal.y = (eRect.top - cRect.top) - 12; // Terapung di bahagian atas butang
+                }
+            }
+
+            window.moveFireflyTo = function(el) {
+                const isInput = el && (el.tagName === 'INPUT');
+                setGoalToElement(el, isInput);
+            };
+
+            // Default resting position near lamp
+            setTimeout(() => setGoalToElement(lamp, false), 100);
+
+            const interactiveEls = container.querySelectorAll('input, button');
+            interactiveEls.forEach(el => {
+                const isInput = el.tagName === 'INPUT';
+                el.addEventListener('focus', () => setGoalToElement(el, isInput));
+                el.addEventListener('click', () => setGoalToElement(el, isInput));
+                el.addEventListener('input', () => setGoalToElement(el, isInput));
+            });
+
+            function fly() {
+                hoverOffset += 0.06;
+                const floatX = Math.cos(hoverOffset * 0.8) * 3;
+                const floatY = Math.sin(hoverOffset) * 3;
+
+                vx = (vx + ((goal.x + floatX) - x) * STIFF) * DAMP;
+                vy = (vy + ((goal.y + floatY) - y) * STIFF) * DAMP;
+                x += vx;
+                y += vy;
+
+                spark.style.transform = `translate(${x}px, ${y}px)`;
+                requestAnimationFrame(fly);
+            }
+            fly();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('.glass-input, textarea');
+            const inputs = document.querySelectorAll('.glass-input, .firefly-input, textarea');
             inputs.forEach(input => {
                 input.addEventListener('input', function() { checkFilled(this); });
                 input.addEventListener('change', function() { checkFilled(this); });
             });
+            initFireflyAnimation();
         });
 
         /* Alert Modals */
@@ -1146,14 +1480,19 @@
         document.getElementById('tabLogin').onclick = () => {
             document.getElementById('loginFormContainer').classList.remove('hidden');
             document.getElementById('registerFormContainer').classList.add('hidden');
-            document.getElementById('tabLogin').className = "w-1/2 py-3 text-center font-extrabold text-sm transition-all tab-active";
-            document.getElementById('tabRegister').className = "w-1/2 py-3 text-center font-extrabold text-sm transition-all tab-inactive";
+            document.getElementById('authHeaderTitle').innerText = 'Log Masuk';
+            document.getElementById('tabLogin').className = "w-1/2 py-2.5 text-center font-bold text-xs tracking-wider rounded-full transition-all firefly-tab-active";
+            document.getElementById('tabRegister').className = "w-1/2 py-2.5 text-center font-bold text-xs tracking-wider rounded-full transition-all firefly-tab-inactive";
+            if (window.moveFireflyTo) window.moveFireflyTo(document.getElementById('loginIC'));
         };
+
         document.getElementById('tabRegister').onclick = () => {
             document.getElementById('registerFormContainer').classList.remove('hidden');
             document.getElementById('loginFormContainer').classList.add('hidden');
-            document.getElementById('tabRegister').className = "w-1/2 py-3 text-center font-extrabold text-sm transition-all tab-active";
-            document.getElementById('tabLogin').className = "w-1/2 py-3 text-center font-extrabold text-sm transition-all tab-inactive";
+            document.getElementById('authHeaderTitle').innerText = 'Daftar Baharu';
+            document.getElementById('tabRegister').className = "w-1/2 py-2.5 text-center font-bold text-xs tracking-wider rounded-full transition-all firefly-tab-active";
+            document.getElementById('tabLogin').className = "w-1/2 py-2.5 text-center font-bold text-xs tracking-wider rounded-full transition-all firefly-tab-inactive";
+            if (window.moveFireflyTo) window.moveFireflyTo(document.getElementById('regICInit'));
         };
 
         document.getElementById('btnSeterusnyaReg').onclick = async () => {
@@ -1181,7 +1520,7 @@
                     showAlert('Berjaya', 'Maklumat awal disahkan. Sila lengkapkan borang profil.');
                 }
             } catch(e) { showAlert('Ralat', 'Gagal berhubung ke pangkalan data.'); }
-            btn.disabled = false; text.innerText = "SETERUSNYA"; loader.classList.add('hidden');
+            btn.disabled = false; text.innerText = "Seterusnya"; loader.classList.add('hidden');
         };
 
         async function processLogin() {
@@ -1189,25 +1528,42 @@
             const pass = document.getElementById('loginPassword').value;
             if(!ic || !pass) { showAlert('Ralat', 'Isi No. Kad Pengenalan dan Kata Laluan.'); return; }
 
+            const btn = document.getElementById('btnLoginSubmit');
             const loader = document.getElementById('loginLoader');
             const text = document.getElementById('loginText');
-            loader.classList.remove('hidden'); text.innerText = 'MENYEMAK...';
+            loader.classList.remove('hidden'); text.innerText = 'Menyemak...';
 
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=login&noic=${encodeURIComponent(ic)}&password=${encodeURIComponent(pass)}`);
                 const result = await res.json();
                 if (result.status === 'success') {
-                    document.getElementById('formIC').value = ic;
-                    document.getElementById('displayIC').value = ic;
-                    document.getElementById('formPassword').value = pass;
-                    fillForm(result.data);
-                    showMainForm();
-                } else { showAlert('Log Masuk Gagal', result.message); }
-            } catch (err) { showAlert('Ralat', 'Sistem tidak dapat dihubungi. Sila pastikan pautan SCRIPT_URL betul dan anda telah mendaftar.'); }
-            loader.classList.add('hidden'); text.innerText = 'LOG MASUK';
+                    if (btn) {
+                        btn.classList.add('firefly-btn-lit');
+                        text.innerText = "✓ Berjaya Masuk";
+                        if (window.moveFireflyTo) window.moveFireflyTo(btn);
+                    }
+                    setTimeout(() => {
+                        document.getElementById('formIC').value = ic;
+                        document.getElementById('displayIC').value = ic;
+                        document.getElementById('formPassword').value = pass;
+                        fillForm(result.data);
+                        showMainForm();
+                        if (btn) btn.classList.remove('firefly-btn-lit');
+                        text.innerText = 'Log Masuk';
+                    }, 850);
+                } else { 
+                    showAlert('Log Masuk Gagal', result.message); 
+                    text.innerText = 'Log Masuk';
+                }
+            } catch (err) { 
+                showAlert('Ralat', 'Sistem tidak dapat dihubungi. Sila pastikan pautan SCRIPT_URL betul dan anda telah mendaftar.'); 
+                text.innerText = 'Log Masuk';
+            }
+            loader.classList.add('hidden');
         }
 
         function showMainForm() {
+            stopCamera();
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainFormSection').classList.remove('hidden');
             document.getElementById('btnLogout').classList.remove('hidden');
@@ -1215,15 +1571,16 @@
         }
 
         function logout() {
+            stopCamera();
             document.getElementById('profileForm').reset();
             document.getElementById('authSection').classList.remove('hidden');
             document.getElementById('mainFormSection').classList.add('hidden');
             document.getElementById('btnLogout').classList.add('hidden');
             document.querySelectorAll('.is-filled').forEach(el => el.classList.remove('is-filled'));
             document.getElementById('gambarPreview').classList.add('hidden');
+            document.getElementById('gambarInfo').classList.add('hidden');
             document.getElementById('gambarLinkContainer').classList.add('hidden');
             
-            // reset toggles
             document.getElementById('divJawatanLain').classList.add('hidden');
             document.getElementById('divSkimLain').classList.add('hidden');
             document.getElementById('divGredLain').classList.add('hidden');
@@ -1231,19 +1588,137 @@
             document.getElementById('divTahunBengkel').classList.add('hidden');
             document.getElementById('divJudulPenulis').classList.add('hidden');
             
+            setPicMode('upload');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        /* Image Processor */
+        /* --- MOD PILIHAN & KAMERA LIVE --- */
+        let cameraStream = null;
+
+        function setPicMode(mode) {
+            const btnUpload = document.getElementById('btnModeUpload');
+            const btnCam = document.getElementById('btnModeCamera');
+            const uploadUI = document.getElementById('uploadUI');
+            const cameraUI = document.getElementById('cameraUI');
+
+            if (mode === 'upload') {
+                stopCamera();
+                btnUpload.className = "px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md transition-all";
+                btnCam.className = "px-4 py-2.5 bg-transparent text-gray-600 hover:text-indigo-600 rounded-lg text-sm font-bold transition-all";
+                uploadUI.classList.remove('hidden');
+                cameraUI.classList.add('hidden');
+            } else {
+                btnCam.className = "px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md transition-all";
+                btnUpload.className = "px-4 py-2.5 bg-transparent text-gray-600 hover:text-indigo-600 rounded-lg text-sm font-bold transition-all";
+                cameraUI.classList.remove('hidden');
+                uploadUI.classList.add('hidden');
+            }
+        }
+
+        async function startCamera() {
+            const video = document.getElementById('liveVideo');
+            const btnStart = document.getElementById('btnStartCam');
+            const btnCapture = document.getElementById('btnCaptureCam');
+            const btnStop = document.getElementById('btnStopCam');
+
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 800 } }, 
+                    audio: false 
+                });
+                video.srcObject = cameraStream;
+                video.classList.remove('hidden');
+                btnStart.classList.add('hidden');
+                btnCapture.classList.remove('hidden');
+                btnStop.classList.remove('hidden');
+            } catch (err) {
+                showAlert('Ralat Kamera', 'Tidak dapat mengakses kamera. Sila pastikan anda telah memberi kebenaran akses kamera pada pelayar web.');
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            const video = document.getElementById('liveVideo');
+            const btnStart = document.getElementById('btnStartCam');
+            const btnCapture = document.getElementById('btnCaptureCam');
+            const btnStop = document.getElementById('btnStopCam');
+
+            if (video) {
+                video.srcObject = null;
+                video.classList.add('hidden');
+            }
+            if (btnStart) btnStart.classList.remove('hidden');
+            if (btnCapture) btnCapture.classList.add('hidden');
+            if (btnStop) btnStop.classList.add('hidden');
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('liveVideo');
+            const canvas = document.getElementById('liveCanvas');
+            if (!video.videoWidth || !video.videoHeight) return;
+
+            const targetRatio = 3 / 4;
+            const vWidth = video.videoWidth;
+            const vHeight = video.videoHeight;
+            let sWidth = vWidth;
+            let sHeight = vHeight;
+            let sx = 0;
+            let sy = 0;
+
+            if (vWidth / vHeight > targetRatio) {
+                sWidth = vHeight * targetRatio;
+                sx = (vWidth - sWidth) / 2;
+            } else {
+                sHeight = vWidth / targetRatio;
+                sy = (vHeight - sHeight) / 2;
+            }
+
+            canvas.width = 450;
+            canvas.height = 600;
+            const ctx = canvas.getContext('2d');
+
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+
+            const b64 = canvas.toDataURL('image/jpeg', 0.85);
+            const sizeKB = Math.round((b64.length * 3) / 4 / 1024);
+
+            document.getElementById('GambarBase64').value = b64;
+            const img = document.getElementById('gambarPreview');
+            img.src = b64;
+            img.classList.remove('hidden');
+
+            const info = document.getElementById('gambarInfo');
+            info.innerText = `✓ Gambar Ditangkap (${sizeKB} KB)`;
+            info.classList.remove('hidden');
+
+            document.getElementById('gambarLinkContainer').classList.add('hidden');
+            stopCamera();
+            showAlert('Berjaya', 'Gambar berjaya ditangkap dan sedia untuk dimuat naik bersama borang!');
+        }
+
+        /* Image File Processor */
         document.getElementById('gambarUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
+            if (file.size > 250 * 1024) {
+                showAlert('Saiz Terlalu Besar', 'Saiz gambar melebihi 250KB. Sila pilih fail yang lebih kecil atau gunakan Kamera Live.');
+                this.value = '';
+                return;
+            }
             const reader = new FileReader();
             reader.onload = function(event) {
                 const b64 = event.target.result;
                 document.getElementById('GambarBase64').value = b64;
                 const img = document.getElementById('gambarPreview');
                 img.src = b64; img.classList.remove('hidden');
+                const info = document.getElementById('gambarInfo');
+                info.innerText = `✓ Fail Dipilih (${Math.round(file.size / 1024)} KB)`;
+                info.classList.remove('hidden');
                 document.getElementById('gambarLinkContainer').classList.add('hidden'); 
             };
             reader.readAsDataURL(file);
@@ -1253,7 +1728,6 @@
         function fillForm(data) {
             const form = document.getElementById('profileForm');
 
-            // Handle dropdown dependencies Program & Subjek
             if (data['ProgramPenerbitan']) {
                 const prog = document.getElementById('selProgram');
                 if(prog) { prog.value = data['ProgramPenerbitan']; updateMataPelajaran(); }
@@ -1263,7 +1737,6 @@
                 if(subjek) subjek.value = data['MataPelajaran'];
             }
 
-            // Handle Checkboxes (Pengiktirafan)
             if(data['Pengiktirafan']) {
                 const arrPengiktirafan = data['Pengiktirafan'].split(', ');
                 const checkboxes = document.querySelectorAll('input[name="chkPengiktirafan"]');
@@ -1275,7 +1748,6 @@
                 if(lainValues.length > 0) { document.getElementById('chkLainText').value = lainValues.join(', '); }
             }
 
-            // Iterate Data and fill
             Object.keys(data).forEach(key => {
                 if(key === 'Timestamp' || key === 'Password' || key === 'ProgramPenerbitan' || key === 'MataPelajaran' || key === 'Pengiktirafan') return;
                 
@@ -1287,6 +1759,7 @@
                         linkAnchor.href = data[key];
                         linkContainer.classList.remove('hidden');
                         document.getElementById('gambarPreview').classList.add('hidden');
+                        document.getElementById('gambarInfo').classList.add('hidden');
                     }
                     return;
                 }
@@ -1297,7 +1770,6 @@
                 }
             });
             
-            // Trigger UI toggles based on fetched data
             if(data['Jawatan'] === 'LAIN-LAIN') toggleLainLain('selJawatan', 'divJawatanLain', 'inputJawatanLain');
             if(data['Skim'] === 'LAIN-LAIN') toggleLainLain('selSkim', 'divSkimLain', 'inputSkimLain');
             if(data['Gred'] === 'LAIN-LAIN') toggleLainLain('selGred', 'divGredLain', 'inputGredLain');
@@ -1306,7 +1778,6 @@
             if(data['BengkelBBT'] === 'YA') toggleYA('selBengkel', 'divTahunBengkel');
             if(data['PenulisBuku'] === 'YA') toggleYA('selPenulis', 'divJudulPenulis');
 
-            // Force visual check for display IC
             checkFilled(document.getElementById('displayIC'));
         }
 
@@ -1314,7 +1785,6 @@
         document.getElementById('profileForm').onsubmit = async (e) => {
             e.preventDefault();
             
-            // Process Change Password if filled
             const tukarPass = document.getElementById('tukarPass').value;
             const sahkanPass = document.getElementById('sahkanTukarPass').value;
             
@@ -1323,14 +1793,12 @@
                 document.getElementById('formPassword').value = tukarPass;
             }
 
-            // Compile Checkboxes
             const chkBoxes = document.querySelectorAll('input[name="chkPengiktirafan"]:checked');
             let selPengiktirafan = Array.from(chkBoxes).map(cb => cb.value);
             const lainText = document.getElementById('chkLainText').value.trim();
             if(lainText) { selPengiktirafan.push(lainText); }
             document.getElementById('PengiktirafanHidden').value = selPengiktirafan.join(', ');
 
-            // Form Payload Construction
             const formData = new FormData(e.target);
             const dataObj = Object.fromEntries(formData.entries());
             delete dataObj['chkPengiktirafan'];
