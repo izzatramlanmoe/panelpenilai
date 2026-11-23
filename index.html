@@ -654,7 +654,7 @@
 
                         <!-- Gambar Terkini: Upload Fail atau Kamera Live -->
                         <div class="md:col-span-2 mt-4 bg-white/40 p-6 rounded-2xl border border-white/80 shadow-inner">
-                            <label class="block text-sm font-extrabold mb-2 text-indigo-900">Gambar Terkini (Upload / Kamera Live)</label>
+                            <label class="block text-sm font-extrabold mb-2 text-indigo-900">Gambar Terkini (Upload / Kamera Live) <span class="req-star">*</span></label>
                             <p class="text-xs text-gray-700 font-bold mb-4">Sila muat naik GAMBAR BERUKURAN PASSPORT (PARAS BAHU) terkini anda atau tangkap gambar secara langsung. Pastikan dalam format PNG atau JPEG SAHAJA. Saiz TIDAK MELEBIHI 250KB.</p>
                             
                             <!-- Tab Pilihan Mod Gambar -->
@@ -1785,6 +1785,14 @@
         document.getElementById('profileForm').onsubmit = async (e) => {
             e.preventDefault();
             
+            // Semak jika gambar telah dimuat naik / ditangkap
+            const base64Val = document.getElementById('GambarBase64').value;
+            const hasExistingPic = !document.getElementById('gambarLinkContainer').classList.contains('hidden');
+            if (!base64Val && !hasExistingPic) {
+                showAlert('Maklumat Tidak Lengkap', 'Sila muat naik atau tangkap Gambar Terkini anda terlebih dahulu.');
+                return;
+            }
+
             const tukarPass = document.getElementById('tukarPass').value;
             const sahkanPass = document.getElementById('sahkanTukarPass').value;
             
