@@ -205,6 +205,15 @@
             100% { transform: rotate(-20deg) scaleY(1.1); }
         }
 
+        /* Shutter Flash Animation for Live Camera */
+        @keyframes cameraFlashAnim {
+            0% { opacity: 0.95; }
+            100% { opacity: 0; }
+        }
+        .animate-flash {
+            animation: cameraFlashAnim 0.35s ease-out forwards;
+        }
+
         /* GLOBAL DARK MODE OVERRIDES */
         body {
             background: #0d0c0b;
@@ -321,8 +330,8 @@
             </div>
 
             <div id="forgotStep2" class="hidden mt-4">
-                <div class="bg-blue-50/60 border border-blue-200/60 rounded-2xl p-4 mb-5 shadow-sm">
-                    <p class="text-sm text-blue-800 font-bold text-center">Sila jawab soalan keselamatan berikut untuk menetapkan kata laluan baharu.</p>
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 mb-5 shadow-sm">
+                    <p class="text-sm text-amber-200 font-bold text-center">Sila jawab soalan keselamatan berikut untuk menetapkan kata laluan baharu.</p>
                 </div>
                 <div class="space-y-4 mb-6">
                     <div>
@@ -652,15 +661,15 @@
                             </select>
                         </div>
 
-                        <!-- Gambar Terkini: Upload Fail atau Kamera Live -->
+                        <!-- Gambar Terkini: Upload Fail atau Kamera Live (Potret Pasport 3:4) -->
                         <div class="md:col-span-2 mt-4 bg-white/40 p-6 rounded-2xl border border-white/80 shadow-inner">
-                            <label class="block text-sm font-extrabold mb-2 text-indigo-900">Gambar Terkini (Upload / Kamera Live)</label>
-                            <p class="text-xs text-gray-700 font-bold mb-4">Sila muat naik GAMBAR BERUKURAN PASSPORT (PARAS BAHU) terkini anda atau tangkap gambar secara langsung. Pastikan dalam format PNG atau JPEG SAHAJA. Saiz TIDAK MELEBIHI 250KB.</p>
+                            <label class="block text-sm font-extrabold mb-2 text-indigo-900">Gambar Terkini (Upload / Kamera Live) <span class="req-star">*</span></label>
+                            <p class="text-xs text-gray-700 font-bold mb-4">Sila muat naik GAMBAR BERUKURAN PASSPORT (PARAS BAHU) terkini anda atau tangkap gambar secara langsung dalam bingkai potret pasport. Pastikan dalam format PNG atau JPEG SAHAJA. Saiz TIDAK MELEBIHI 250KB.</p>
                             
                             <!-- Tab Pilihan Mod Gambar -->
                             <div class="inline-flex p-1 bg-white/70 rounded-xl mb-5 border border-indigo-100 shadow-sm">
                                 <button type="button" id="btnModeUpload" onclick="setPicMode('upload')" class="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md transition-all">Muat Naik Fail</button>
-                                <button type="button" id="btnModeCamera" onclick="setPicMode('camera')" class="px-4 py-2.5 bg-transparent text-gray-600 hover:text-indigo-600 rounded-lg text-sm font-bold transition-all">Kamera Live</button>
+                                <button type="button" id="btnModeCamera" onclick="setPicMode('camera')" class="px-4 py-2.5 bg-transparent text-gray-600 hover:text-indigo-600 rounded-lg text-sm font-bold transition-all">Kamera Live (Pasport)</button>
                             </div>
 
                             <!-- UI Mod Muat Naik Fail -->
@@ -668,20 +677,60 @@
                                 <input type="file" id="gambarUpload" accept="image/png, image/jpeg" class="w-full md:w-auto text-sm text-gray-700 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-extrabold file:bg-gradient-to-r file:from-blue-600 file:to-indigo-600 file:text-white cursor-pointer hover:file:shadow-lg hover:file:scale-[1.02] transition-all">
                             </div>
 
-                            <!-- UI Mod Kamera Live -->
+                            <!-- UI Mod Kamera Live (Bingkai Potret Pasport 3:4 WYSIWYG) -->
                             <div id="cameraUI" class="hidden space-y-4">
-                                <div class="relative w-full max-w-sm bg-slate-900 rounded-2xl overflow-hidden shadow-lg border-2 border-white">
-                                    <video id="liveVideo" autoplay playsinline class="hidden w-full h-auto object-cover transform -scale-x-100"></video>
+                                <!-- Bingkai Potret Nisbah 3:4 (Sama tepat dengan gambar yang masuk ke Spreadsheet) -->
+                                <div id="cameraFrameContainer" class="relative w-[240px] sm:w-[270px] aspect-[3/4] bg-stone-950 rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400/60 mx-auto md:mx-0 flex items-center justify-center">
+                                    <!-- Placeholder sebelum kamera dibuka -->
+                                    <div id="cameraPlaceholder" class="flex flex-col items-center justify-center text-center p-4 text-stone-400">
+                                        <svg class="w-12 h-12 mb-2 text-amber-500/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <span class="text-xs font-bold text-stone-300">Bingkai Potret Pasport (3:4)</span>
+                                        <span class="text-[11px] text-stone-500 mt-1">Tekan "Buka Kamera" di bawah</span>
+                                    </div>
+
+                                    <!-- Video Live (Dipotong tepat 3:4 secara langsung dengan object-cover) -->
+                                    <video id="liveVideo" autoplay playsinline class="hidden w-full h-full object-cover transform -scale-x-100"></video>
+
+                                    <!-- Panduan Muka & Bahu Pasport (Overlay sahaja, tidak dicetak pada gambar) -->
+                                    <div id="cameraGuide" class="hidden absolute inset-0 pointer-events-none">
+                                        <!-- Siluet Kepala & Bahu -->
+                                        <svg viewBox="0 0 300 400" class="w-full h-full" preserveAspectRatio="none">
+                                            <!-- Sudut Bingkai -->
+                                            <path d="M18 42 L18 18 L42 18" fill="none" stroke="rgba(251, 191, 36, 0.85)" stroke-width="3" stroke-linecap="round"/>
+                                            <path d="M258 18 L282 18 L282 42" fill="none" stroke="rgba(251, 191, 36, 0.85)" stroke-width="3" stroke-linecap="round"/>
+                                            <path d="M18 358 L18 382 L42 382" fill="none" stroke="rgba(251, 191, 36, 0.85)" stroke-width="3" stroke-linecap="round"/>
+                                            <path d="M258 382 L282 382 L282 358" fill="none" stroke="rgba(251, 191, 36, 0.85)" stroke-width="3" stroke-linecap="round"/>
+                                            <!-- Garisan Panduan Bujur Muka -->
+                                            <ellipse cx="150" cy="158" rx="68" ry="88" fill="none" stroke="rgba(255, 255, 255, 0.75)" stroke-width="2" stroke-dasharray="6 5"/>
+                                            <!-- Garisan Panduan Bahu -->
+                                            <path d="M40 390 C48 310, 95 278, 150 278 C205 278, 252 310, 260 390" fill="none" stroke="rgba(255, 255, 255, 0.65)" stroke-width="2" stroke-dasharray="6 5"/>
+                                        </svg>
+                                        <!-- Label Panduan -->
+                                        <div class="absolute bottom-2.5 inset-x-0 flex justify-center">
+                                            <span class="bg-black/65 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-3 py-1 rounded-full border border-amber-400/30 tracking-wide">
+                                                POTRET PASPORT 3:4 • PARAS BAHU
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Kesan Kilat Kamera (Shutter Flash) -->
+                                    <div id="cameraFlash" class="hidden absolute inset-0 bg-white pointer-events-none z-20"></div>
+
+                                    <!-- Kanvas Tersembunyi untuk Pemprosesan 450x600 Potret -->
                                     <canvas id="liveCanvas" class="hidden"></canvas>
                                 </div>
-                                <div class="flex flex-wrap gap-3">
+
+                                <div class="flex flex-wrap justify-center md:justify-start gap-3">
                                     <button type="button" id="btnStartCam" onclick="startCamera()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-extrabold shadow-md transition-all flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                         Buka Kamera
                                     </button>
                                     <button type="button" id="btnCaptureCam" onclick="capturePhoto()" class="hidden px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-extrabold shadow-md transition-all flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                        Tangkap & Muat Naik Gambar
+                                        Tangkap Gambar Pasport
                                     </button>
                                     <button type="button" id="btnStopCam" onclick="stopCamera()" class="hidden px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-extrabold shadow-md transition-all">
                                         Tutup Kamera
@@ -689,11 +738,11 @@
                                 </div>
                             </div>
 
-                            <!-- Pratonton & Status Gambar -->
+                            <!-- Pratonton & Status Gambar (Nisbah 3:4 Potret Tepat: 120x160px) -->
                             <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 mt-5">
                                 <input type="hidden" id="GambarBase64" name="GambarBase64">
                                 <div class="flex flex-col items-start space-y-2">
-                                    <img id="gambarPreview" class="hidden rounded-xl shadow-xl object-cover border-4 border-white" style="width: 120px; height: 150px;" alt="Preview">
+                                    <img id="gambarPreview" class="hidden rounded-xl shadow-xl object-cover border-4 border-white" style="width: 120px; height: 160px;" alt="Pratonton Gambar Pasport">
                                     <span id="gambarInfo" class="hidden text-xs font-extrabold text-indigo-800 bg-indigo-100 px-3 py-1 rounded-full"></span>
                                 </div>
                                 <div id="gambarLinkContainer" class="hidden flex flex-col justify-center">
@@ -1355,22 +1404,19 @@
                 if (eRect.width === 0 && eRect.height === 0) return;
 
                 if (isInput && el.type !== 'password' && el.type !== 'checkbox') {
-                    // Kira kedudukan mendatar kelip-kelip supaya ikut kursor teks
-                    const charWidth = window.innerWidth < 768 ? 7 : 8.5; // Anggaran saiz piksel bagi satu huruf
+                    const charWidth = window.innerWidth < 768 ? 7 : 8.5;
                     let textLen = el.value ? el.value.length : 0;
                     let targetX = (eRect.left - cRect.left) + 24 + (textLen * charWidth);
-                    const maxX = (eRect.right - cRect.left) - 30; // Had ruang maksimum ke kanan
+                    const maxX = (eRect.right - cRect.left) - 30;
                     
                     goal.x = Math.min(targetX, maxX);
-                    goal.y = (eRect.top - cRect.top) - 12; // Terapung di bahagian atas input (Tidak lindung teks)
+                    goal.y = (eRect.top - cRect.top) - 12;
                 } else if (isInput && el.type === 'password') {
-                    // Untuk kata laluan pergi berhampiran dengan ikon mata
                     goal.x = (eRect.right - cRect.left) - 40;
-                    goal.y = (eRect.top - cRect.top) - 12; // Terapung di bahagian atas kotak
+                    goal.y = (eRect.top - cRect.top) - 12;
                 } else {
-                    // Jika klik pada butang, duduk ditengah
                     goal.x = (eRect.left - cRect.left) + (eRect.width / 2) - 6;
-                    goal.y = (eRect.top - cRect.top) - 12; // Terapung di bahagian atas butang
+                    goal.y = (eRect.top - cRect.top) - 12;
                 }
             }
 
@@ -1379,7 +1425,6 @@
                 setGoalToElement(el, isInput);
             };
 
-            // Default resting position near lamp
             setTimeout(() => setGoalToElement(lamp, false), 100);
 
             const interactiveEls = container.querySelectorAll('input, button');
@@ -1592,8 +1637,10 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        /* --- MOD PILIHAN & KAMERA LIVE --- */
+        /* --- MOD PILIHAN & KAMERA LIVE (POTRET PASPORT 3:4 WYSIWYG) --- */
         let cameraStream = null;
+        const PASSPORT_WIDTH = 450;   // Nisbah 3:4 (Potret Pasport Standard)
+        const PASSPORT_HEIGHT = 600;  // Sama tepat dengan bingkai viewfinder & preview
 
         function setPicMode(mode) {
             const btnUpload = document.getElementById('btnModeUpload');
@@ -1617,17 +1664,25 @@
 
         async function startCamera() {
             const video = document.getElementById('liveVideo');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const guide = document.getElementById('cameraGuide');
             const btnStart = document.getElementById('btnStartCam');
             const btnCapture = document.getElementById('btnCaptureCam');
             const btnStop = document.getElementById('btnStopCam');
 
             try {
                 cameraStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 800 } }, 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 900 },
+                        height: { ideal: 1200 }
+                    }, 
                     audio: false 
                 });
                 video.srcObject = cameraStream;
                 video.classList.remove('hidden');
+                if (placeholder) placeholder.classList.add('hidden');
+                if (guide) guide.classList.remove('hidden');
                 btnStart.classList.add('hidden');
                 btnCapture.classList.remove('hidden');
                 btnStop.classList.remove('hidden');
@@ -1642,6 +1697,8 @@
                 cameraStream = null;
             }
             const video = document.getElementById('liveVideo');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const guide = document.getElementById('cameraGuide');
             const btnStart = document.getElementById('btnStartCam');
             const btnCapture = document.getElementById('btnCaptureCam');
             const btnStop = document.getElementById('btnStopCam');
@@ -1650,17 +1707,34 @@
                 video.srcObject = null;
                 video.classList.add('hidden');
             }
+            if (placeholder) placeholder.classList.remove('hidden');
+            if (guide) guide.classList.add('hidden');
             if (btnStart) btnStart.classList.remove('hidden');
             if (btnCapture) btnCapture.classList.add('hidden');
             if (btnStop) btnStop.classList.add('hidden');
         }
 
+        /**
+         * Menangkap gambar daripada video live dan memotongnya tepat di bahagian tengah
+         * mengikut nisbah potret pasport 3:4 (450x600px) supaya apa yang dipaparkan pada
+         * bingkai kamera, pratonton, dan yang masuk ke Google Sheet / Drive adalah 100% SAMA.
+         */
         function capturePhoto() {
             const video = document.getElementById('liveVideo');
             const canvas = document.getElementById('liveCanvas');
+            const flash = document.getElementById('cameraFlash');
             if (!video.videoWidth || !video.videoHeight) return;
 
-            const targetRatio = 3 / 4;
+            // Kesan kilat kamera ringkas
+            if (flash) {
+                flash.classList.remove('hidden', 'animate-flash');
+                void flash.offsetWidth; // trigger reflow
+                flash.classList.add('animate-flash');
+                setTimeout(() => flash.classList.add('hidden'), 360);
+            }
+
+            // Kiraan potongan tengah (center-crop) mengikut nisbah tepat 3:4 (sama dengan CSS object-cover)
+            const targetRatio = PASSPORT_WIDTH / PASSPORT_HEIGHT; // 0.75 (3:4 Potret)
             const vWidth = video.videoWidth;
             const vHeight = video.videoHeight;
             let sWidth = vWidth;
@@ -1669,36 +1743,53 @@
             let sy = 0;
 
             if (vWidth / vHeight > targetRatio) {
+                // Kamera lebih lebar (landskap) -> potong kiri & kanan secara seimbang
                 sWidth = vHeight * targetRatio;
                 sx = (vWidth - sWidth) / 2;
             } else {
+                // Kamera lebih tinggi -> potong atas & bawah secara seimbang
                 sHeight = vWidth / targetRatio;
                 sy = (vHeight - sHeight) / 2;
             }
 
-            canvas.width = 450;
-            canvas.height = 600;
+            // Tetapkan saiz kanvas output kepada potret pasport 450x600px
+            canvas.width = PASSPORT_WIDTH;
+            canvas.height = PASSPORT_HEIGHT;
             const ctx = canvas.getContext('2d');
 
+            ctx.save();
+            // Cerminkan secara mendatar supaya 100% sama dengan paparan live viewfinder
             ctx.translate(canvas.width, 0);
             ctx.scale(-1, 1);
             ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+            ctx.restore();
 
-            const b64 = canvas.toDataURL('image/jpeg', 0.85);
-            const sizeKB = Math.round((b64.length * 3) / 4 / 1024);
+            // Mampatkan secara automatik supaya saiz fail sentiasa bawah 250KB untuk Google Sheet / Drive
+            let quality = 0.90;
+            let b64 = canvas.toDataURL('image/jpeg', quality);
+            let sizeKB = Math.round((b64.length * 3) / 4 / 1024);
 
+            while (sizeKB > 240 && quality > 0.45) {
+                quality -= 0.05;
+                b64 = canvas.toDataURL('image/jpeg', quality);
+                sizeKB = Math.round((b64.length * 3) / 4 / 1024);
+            }
+
+            // Simpan data Base64 yang sama tepat untuk dihantar ke Google Sheet / Drive
             document.getElementById('GambarBase64').value = b64;
+
+            // Paparkan pratonton potret pasport 3:4 yang sama
             const img = document.getElementById('gambarPreview');
             img.src = b64;
             img.classList.remove('hidden');
 
             const info = document.getElementById('gambarInfo');
-            info.innerText = `✓ Gambar Ditangkap (${sizeKB} KB)`;
+            info.innerText = `✓ Pasport Potret 3:4 (${PASSPORT_WIDTH}×${PASSPORT_HEIGHT}px • ${sizeKB} KB)`;
             info.classList.remove('hidden');
 
             document.getElementById('gambarLinkContainer').classList.add('hidden');
             stopCamera();
-            showAlert('Berjaya', 'Gambar berjaya ditangkap dan sedia untuk dimuat naik bersama borang!');
+            showAlert('Berjaya', 'Gambar potret pasport (3:4) berjaya ditangkap dan sedia untuk disimpan ke dalam sistem!');
         }
 
         /* Image File Processor */
@@ -1785,6 +1876,14 @@
         document.getElementById('profileForm').onsubmit = async (e) => {
             e.preventDefault();
             
+            // Semak jika gambar telah dimuat naik / ditangkap
+            const base64Val = document.getElementById('GambarBase64').value;
+            const hasExistingPic = !document.getElementById('gambarLinkContainer').classList.contains('hidden');
+            if (!base64Val && !hasExistingPic) {
+                showAlert('Maklumat Tidak Lengkap', 'Sila muat naik atau tangkap Gambar Terkini anda terlebih dahulu.');
+                return;
+            }
+
             const tukarPass = document.getElementById('tukarPass').value;
             const sahkanPass = document.getElementById('sahkanTukarPass').value;
             
